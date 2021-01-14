@@ -1,0 +1,11 @@
+{
+  "name": "simple-weather-backend",
+  "version": "1.0.0",
+  "description": "An API client to fetch weather data",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Bryan and Maksim",
+  "license": "ISC"
+}
