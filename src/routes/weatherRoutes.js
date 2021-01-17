@@ -38,6 +38,7 @@ router.get('/:city', async function (req, res) {
   // outside
   // current object (first hourly data)
   // and Sluice road
+  // what 3 picture
 
   // https://api.weather.gov/openapi.json
   // https://api.weather.gov/gridpoints/{office}/{grid X},{grid Y}/forecast
