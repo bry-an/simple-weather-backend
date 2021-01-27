@@ -6,6 +6,14 @@ _BACK-END TEAM STRIKES BACK_
 
 ## Routes
 
+```
 / - health check
+```
+
+```
 /api/weather/:city - weather information (sluice data) for a specific city
+```
+
+```
 /api/city/search/:city - city autocomplete
+```
