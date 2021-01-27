@@ -63,3 +63,12 @@ export const getDailyForecast = (response) => {
   )
   return massagedData
 }
+
+export const cityResponseParser = (response) => {
+  const cityInformationMapper = (city) => ({
+    name: city.formatted,
+    coords: { lat: city.geometry.lat, lng: city.geometry.lng }
+  })
+  const cities = response.results
+  return cities.map(cityInformationMapper)
+}
