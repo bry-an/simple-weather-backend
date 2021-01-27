@@ -23,5 +23,4 @@ HEALTHCHECK --interval=30s CMD node healthcheck.js
 WORKDIR /opt/node_app/app
 COPY . .
 
-# CMD ["echo", "./src/index.js"]
-CMD ["echo", "123hi"]
+CMD ["node", "./src/index.js"]
