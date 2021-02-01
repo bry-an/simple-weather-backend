@@ -4,6 +4,9 @@ import apiRoutes from './apiRoutes.js'
 const router = express.Router()
 
 router.get('/', (req, res) => {
+  res.status(200).send('Hi!')
+})
+router.get('/healthz', (req, res) => {
   res.status(200).json({
     status: 'Healthy'
   })
