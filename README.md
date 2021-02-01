@@ -7,7 +7,11 @@ _BACK-END TEAM STRIKES BACK_
 ## Routes
 
 ```
-/ - health check
+/ - welcome message
+```
+
+```
+/healthz - health check
 ```
 
 ```
