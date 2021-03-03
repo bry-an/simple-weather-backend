@@ -24,34 +24,26 @@ router.get('/:city', async function (req, res) {
   console.log('Sluice Road', lat, lng)
 
   const weatherInfoRes = await axios.get(`https://api.weather.gov/points/${lat},${lng}`)
-  const { forecastURL, forecastHourlyURL } = getWeatherEndPoints(weatherInfoRes)
-  const fHourlyRes = await axios.get(forecastHourlyURL)
-  const fDailyForecast = await axios.get(forecastURL)
+  const { forecastURL, forecastHourlyURL, forecastGridDataUrl } = getWeatherEndPoints(
+    weatherInfoRes
+  )
+  const fHourlyRes = axios.get(forecastHourlyURL)
+  const fDailyForecast = axios.get(forecastURL)
+  const fHumidity = axios.get(forecastGridDataUrl)
 
-  // -----
+  const promiseArr = await Promise.all([fHourlyRes, fDailyForecast, fHumidity])
 
-  // for (let i = 0; i < 8; i++) {
-  //   console.log(forecast[0].startTime)
-  //   const date = new Date()
-  //   date.setDate(date.getDate() + i)
-  //   // dayObjects[i] =
-  // }
-
-  // res.send(forecast.length)
-  // console.log('forecast', forecast)
-  // console.log('forecastHourly', forecastHourly)
-  // console.log(forecastHourly)
-  // send hourly data
-  // add humidity
-  // what 3 words
-  // Sluice road too
+  // Sluice road
   const sluiceData = {
-    hourlyForecast: getHourlyWeather(fHourlyRes),
-    dailyForecast: getDailyForecast(fDailyForecast),
-    currentForecast: getHourlyWeather(fHourlyRes)[0],
+    hourlyForecast: getHourlyWeather(promiseArr[0]),
+    dailyForecast: getDailyForecast(promiseArr[1], promiseArr[2]),
+    currentForecast: getHourlyWeather(promiseArr[0])[0],
     what3Words: get3Words(latLngRes),
     luck: Math.round(Math.random()) ? 'no luck' : 'luck'
   }
+
+  sluiceData.currentForecast.humidity = sluiceData.dailyForecast[0].humidity
+
   res.json(sluiceData)
 
   // // 8 objects for 8 days

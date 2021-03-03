@@ -12,7 +12,8 @@ export const get3Words = (response) => {
 export const getWeatherEndPoints = (response) => {
   return {
     forecastURL: response.data.properties.forecast,
-    forecastHourlyURL: response.data.properties.forecastHourly
+    forecastHourlyURL: response.data.properties.forecastHourly,
+    forecastGridDataUrl: response.data.properties.forecastGridData
   }
 }
 
@@ -36,11 +37,12 @@ export const getHourlyWeather = (response) => {
       shortForecast
     })
   )
+
   return massagedData
 }
 
-export const getDailyForecast = (response) => {
-  const massagedData = response.data.properties.periods.map(
+export const getDailyForecast = (dailyWeatherResponse, humidityResponse) => {
+  const massagedData = dailyWeatherResponse.data.properties.periods.map(
     ({
       startTime,
       endTime,
@@ -61,7 +63,33 @@ export const getDailyForecast = (response) => {
       detailedForecast
     })
   )
-  return massagedData
+
+  const massagedHumidityData = humidityResponse.data.properties.relativeHumidity.values.map(
+    ({ validTime, value }) => ({
+      timePeriod: validTime.slice(0, -5),
+      humidity: value
+    })
+  )
+
+  return massagedData.map((dayPeriod) => {
+    const resultHour = { ...dayPeriod }
+    const date = new Date(dayPeriod.startTime)
+    const humidityDate = massagedHumidityData.find((hour) => {
+      const humidityDate = new Date(hour.timePeriod.slice(0, 10))
+      if (
+        date.getFullYear() === humidityDate.getFullYear() &&
+        date.getMonth() === humidityDate.getMonth() &&
+        date.getDate() === humidityDate.getDate()
+      ) {
+        return true
+      }
+      return false
+    })
+
+    resultHour.humidity = humidityDate.humidity
+    // hey!!!!!
+    return resultHour
+  })
 }
 
 export const cityResponseParser = (response) => {
